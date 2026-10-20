@@ -8,78 +8,120 @@
 </head>
 <body>
 
-  <header>
-    <h1>Web GIS</h1>
-    <p class="subtitle">Semester project · GIS874 · IGIS, NUST Islamabad</p>
-    <p class="who">Zaid Younas · Reg # 537865 · Submitted to Dr. Shahid Nawaz Khan</p>
+  <header class="topbar">
+    <span class="mark">ZY</span>
+    <span class="topbar-split"></span>
+    <nav>
+      <a href="https://github.com/zayd0123/webgis-537865">Repository</a>
+    </nav>
   </header>
 
   <main>
-    <h2>Labs</h2>
 
-    <ul class="labs">
+    <section class="hero">
+      <p class="eyebrow">GIS874 · Web GIS · IGIS, NUST</p>
+      <h1>A semester project <br>in web mapping</h1>
+      <p class="lead">
+        Three labs, each a self-contained page with its own report and
+        checkpoint screenshots. The repository behind this site holds the
+        full commit history.
+      </p>
+      <p class="byline">Zaid Younas · 537865 · Dr. Shahid Nawaz Khan</p>
+    </section>
 
-      <li>
-        <span class="num">01</span>
-        <span class="body">
-          <a class="title" href="lab1/">My First Web GIS</a>
-          <em>A Leaflet map of Islamabad with a marker on NUST H-12.</em>
-        </span>
-        <span class="links">
-          <a class="go" href="lab1/">Open</a>
-          <a class="doc" href="lab1/report.html">report</a>
-        </span>
-      </li>
+    <section class="labs" aria-labelledby="labs-heading">
+      <div class="section-head">
+        <h2 id="labs-heading">Labs</h2>
+        <span class="count">03 complete</span>
+      </div>
 
-      <li>
-        <span class="num">02</span>
-        <span class="body">
-          <a class="title" href="lab2/">District Explorer</a>
-          <em>160 districts of Pakistan, shaded by 2023 census population, filterable by province.</em>
-        </span>
-        <span class="links">
-          <a class="go" href="lab2/">Open</a>
-          <a class="doc" href="lab2/report.html">report</a>
-        </span>
-      </li>
+      <ul class="cards">
 
-      <li>
-        <span class="num">03</span>
-        <span class="body">
-          <a class="title" href="lab3/">District Dashboard</a>
-          <em>Points, density, clustered markers and a basemap switcher.</em>
-        </span>
-        <span class="links">
-          <a class="go" href="lab3/">Open</a>
-          <a class="doc" href="lab3/report.html">report</a>
-        </span>
-      </li>
+        <li class="card" style="--accent: #2F6F68">
+          <div class="card-inner">
+            <span class="idx">01</span>
+            <div class="txt">
+              <h3><a class="stretch" href="lab1/">My First Web GIS</a></h3>
+              <p>A Leaflet map of Islamabad, with a marker on NUST H-12.</p>
+              <ul class="tags">
+                <li>HTML + CSS</li>
+                <li>Leaflet</li>
+                <li>GitHub Pages</li>
+              </ul>
+            </div>
+            <div class="acts">
+              <a class="report" href="lab1/report.html">Report</a>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </li>
 
-      <li class="pending">
-        <span class="num">04</span>
-        <span class="body">
-          <strong>GeoDjango — Getting Started</strong>
-          <em>In progress.</em>
-        </span>
-        <span class="links"><span class="soon">coming</span></span>
-      </li>
+        <li class="card" style="--accent: #A9612B">
+          <div class="card-inner">
+            <span class="idx">02</span>
+            <div class="txt">
+              <h3><a class="stretch" href="lab2/">District Explorer</a></h3>
+              <p>160 districts of Pakistan shaded by 2023 census population, filterable by province.</p>
+              <ul class="tags">
+                <li>GeoJSON</li>
+                <li>Choropleth</li>
+                <li>Fetch API</li>
+              </ul>
+            </div>
+            <div class="acts">
+              <a class="report" href="lab2/report.html">Report</a>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </li>
 
-    </ul>
+        <li class="card" style="--accent: #4B5A87">
+          <div class="card-inner">
+            <span class="idx">03</span>
+            <div class="txt">
+              <h3><a class="stretch" href="lab3/">District Dashboard</a></h3>
+              <p>Density, proportional symbols and clustered points, with a three-basemap switcher.</p>
+              <ul class="tags">
+                <li>Dashboard</li>
+                <li>Symbology</li>
+                <li>Basemaps</li>
+              </ul>
+            </div>
+            <div class="acts">
+              <a class="report" href="lab3/report.html">Report</a>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+          </div>
+        </li>
 
-    <h2>About</h2>
-    <p>
-      Each lab is a self-contained folder with its own page, its report and its
-      checkpoint screenshots. The repository this site is served from also holds
-      the full commit history, which is part of the assessment.
-    </p>
+      </ul>
 
-    <p class="meta">
-      <a href="https://github.com/zayd0123/webgis-537865">Repository</a>
-    </p>
+      <p class="upcoming">
+        <span class="idx">04</span>
+        <span>GeoDjango — Getting Started</span>
+        <em>in progress</em>
+      </p>
+    </section>
+
+    <section class="note">
+      <h2>About</h2>
+      <p>
+        Each lab is a folder holding the page itself, the data it needs, a
+        <code>report.md</code> with the checkpoints inline, and the screenshots
+        in a <code>Report/</code> directory. Nothing is shared between labs, so
+        any one of them can be read on its own.
+      </p>
+    </section>
+
   </main>
 
   <footer>
     <p>Basemaps by OpenStreetMap contributors · Mapping by Leaflet 1.9.4</p>
+    <p class="foot-links">
+      <a href="https://github.com/zayd0123/webgis-537865">Source</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://zayd0123.github.io/webgis-lab-537865/">Earlier repository</a>
+    </p>
   </footer>
 
 </body>
