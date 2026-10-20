@@ -8,118 +8,63 @@
 </head>
 <body>
 
-  <header class="topbar">
-    <a class="mark" href="./">ZY</a>
-    <span class="topbar-split"></span>
-    <nav>
-      <a href="https://github.com/zayd0123/webgis-537865">Repository</a>
-    </nav>
+<main>
+
+  <header>
+    <h1>Web GIS</h1>
+    <p class="byline">Zaid Younas · 537865 · GIS874 · IGIS, NUST</p>
   </header>
 
-  <main>
+  <section class="labs">
 
-    <section class="hero">
-      <p class="eyebrow">GIS874 · Web GIS · IGIS, NUST</p>
-      <h1>Three labs in web mapping</h1>
-      <p class="lead">
-        A semester project built from the ground up — a first Leaflet map, then
-        a choropleth of Pakistan's districts, then a dashboard. Each one is a
-        self-contained page with its own report and checkpoint screenshots.
-      </p>
-      <p class="byline">Zaid Younas · 537865 · Dr. Shahid Nawaz Khan</p>
-    </section>
+    <h2>Labs</h2>
 
-    <section class="labs" aria-labelledby="labs-heading">
-      <div class="section-head">
-        <h2 id="labs-heading">Labs</h2>
-        <span class="count">03 complete</span>
-      </div>
+    <ul>
 
-      <div class="grid">
+      <li>
+        <span class="n">01</span>
+        <div class="t">
+          <a href="lab1/">My First Web GIS</a>
+          <span class="d">A Leaflet map of Islamabad, with a marker on NUST H-12.</span>
+        </div>
+        <a class="r" href="lab1/report.html">report</a>
+      </li>
 
-        <article class="card" style="--accent: #2F6F68">
-          <a class="thumb" href="lab1/" tabindex="-1" aria-hidden="true">
-            <img src="previews/lab1.jpg" alt="" width="1200" height="750" loading="lazy">
-          </a>
-          <div class="card-body">
-            <div class="card-top">
-              <span class="idx">01</span>
-              <span class="kind">Leaflet</span>
-            </div>
-            <h3><a href="lab1/">My First Web GIS</a></h3>
-            <p>A map of Islamabad with a marker on NUST H-12 — the first page, built from an empty folder.</p>
-            <div class="card-foot">
-              <a class="report" href="lab1/report.html">Read report</a>
-              <span class="arrow" aria-hidden="true">→</span>
-            </div>
-          </div>
-        </article>
+      <li>
+        <span class="n">02</span>
+        <div class="t">
+          <a href="lab2/">District Explorer</a>
+          <span class="d">160 districts of Pakistan, shaded by 2023 census population and filterable by province.</span>
+        </div>
+        <a class="r" href="lab2/report.html">report</a>
+      </li>
 
-        <article class="card" style="--accent: #A9612B">
-          <a class="thumb" href="lab2/" tabindex="-1" aria-hidden="true">
-            <img src="previews/lab2.jpg" alt="" width="1200" height="750" loading="lazy">
-          </a>
-          <div class="card-body">
-            <div class="card-top">
-              <span class="idx">02</span>
-              <span class="kind">Choropleth</span>
-            </div>
-            <h3><a href="lab2/">District Explorer</a></h3>
-            <p>160 districts of Pakistan shaded by 2023 census population, filterable by province.</p>
-            <div class="card-foot">
-              <a class="report" href="lab2/report.html">Read report</a>
-              <span class="arrow" aria-hidden="true">→</span>
-            </div>
-          </div>
-        </article>
+      <li>
+        <span class="n">03</span>
+        <div class="t">
+          <a href="lab3/">District Dashboard</a>
+          <span class="d">Density, proportional symbols and clustered points, with a basemap switcher.</span>
+        </div>
+        <a class="r" href="lab3/report.html">report</a>
+      </li>
 
-        <article class="card" style="--accent: #4B5A87">
-          <a class="thumb" href="lab3/" tabindex="-1" aria-hidden="true">
-            <img src="previews/lab3.jpg" alt="" width="1200" height="750" loading="lazy">
-          </a>
-          <div class="card-body">
-            <div class="card-top">
-              <span class="idx">03</span>
-              <span class="kind">Dashboard</span>
-            </div>
-            <h3><a href="lab3/">District Dashboard</a></h3>
-            <p>Density, proportional symbols and clustered points, with a three-basemap switcher.</p>
-            <div class="card-foot">
-              <a class="report" href="lab3/report.html">Read report</a>
-              <span class="arrow" aria-hidden="true">→</span>
-            </div>
-          </div>
-        </article>
+      <li class="pending">
+        <span class="n">04</span>
+        <div class="t">
+          <span>GeoDjango — Getting Started</span>
+          <span class="d">Not started.</span>
+        </div>
+      </li>
 
-      </div>
+    </ul>
 
-      <p class="upcoming">
-        <span class="idx">04</span>
-        <span class="up-title">GeoDjango — Getting Started</span>
-        <em>in progress</em>
-      </p>
-    </section>
-
-    <section class="note">
-      <h2>About</h2>
-      <p>
-        Each lab is a folder holding the page itself, the data it needs, a
-        <code>report.md</code> with the checkpoints inline, and the screenshots
-        in a <code>Report/</code> directory. Nothing is shared between labs, so
-        any one of them can be read on its own.
-      </p>
-    </section>
-
-  </main>
+  </section>
 
   <footer>
-    <p>Basemaps by OpenStreetMap contributors · Mapping by Leaflet 1.9.4</p>
-    <p class="foot-links">
-      <a href="https://github.com/zayd0123/webgis-537865">Source</a>
-      <span aria-hidden="true">·</span>
-      <a href="https://zayd0123.github.io/webgis-lab-537865/">Earlier repository</a>
-    </p>
+    <p>Source at <a href="https://github.com/zayd0123/webgis-537865">github.com/zayd0123/webgis-537865</a></p>
   </footer>
+
+</main>
 
 </body>
 </html>
