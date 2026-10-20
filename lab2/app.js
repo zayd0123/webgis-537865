@@ -1,13 +1,5 @@
-// District Explorer - Web GIS Lab 2
-//
-// Structure follows the lab's own order:
-//   §5-6  the map, the bounds, the fetch
-//   §7    drawing the layer
-//   §8    classification, popups, legend
-//   §9    the province filter
-// -----------------------------------------------------------------------
+// District Explorer - Lab 2
 
-// §6.1 / §6.2 - the map, held inside Pakistan ---------------------------
 const pakistanLimits = L.latLngBounds([21.5, 58.5], [39.0, 80.5]);
 
 const map = L.map('map', {
@@ -21,16 +13,10 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Declared on window so the DevTools Console can reach it. A plain
-// `let districts` is scoped to this script, so the Console cannot see it until
-// loadData() has finished - which makes §6.4's commands throw "districts is not
-// defined" if you run them too early.
+// on window so the console commands in the lab can see it
 window.districts = null;
 window.layer = null;
 
-// §8.1 - five classes, four break values ---------------------------------
-// A manual classification. Changing the breaks changes the map's message,
-// which is why they belong in the report alongside the map.
 function show(value) {
   if (value === null || value === undefined || value === '') {
     return 'not recorded';
@@ -38,10 +24,9 @@ function show(value) {
   return typeof value === 'number' ? value.toLocaleString() : value;
 }
 
+// five classes, four breaks
 function colourFor(population) {
-  // Missing is not the same as small. This line is what stops the 25 districts
-  // with no census value from falling through to the lowest class and being
-  // read as thinly populated rather than as unrecorded.
+  // no census value: grey, not the lowest class
   if (population === null || population === undefined) return '#c9cfd1';
   if (population > 3000000) return '#7f2704';
   if (population > 1500000) return '#d94801';
@@ -59,11 +44,8 @@ function styleFor(feature) {
   };
 }
 
-// §7.1 / §8.2 - draw the layer, with a popup on every district -----------
 function draw(features) {
-  // Removed first: L.geoJSON(...).addTo(map) adds a layer, it does not replace
-  // one. Without this, filtering would stack layers and slow the map down with
-  // every change.
+  // GeoJSON adds a layer instead of replacing one, so remove the old one first
   if (layer) {
     map.removeLayer(layer);
   }
@@ -73,9 +55,6 @@ function draw(features) {
     {
       style: styleFor,
 
-      // A callback, not a call. Leaflet runs this once per feature as the layer
-      // is built. Every value goes through show() so one missing attribute
-      // costs one popup line rather than the whole map.
       onEachFeature: function (feature, featureLayer) {
         const p = feature.properties;
         featureLayer.bindPopup(
@@ -88,8 +67,7 @@ function draw(features) {
     }
   ).addTo(map);
 
-  // Skipped when the selection is empty: an empty layer has no bounds and
-  // Leaflet throws "Bounds are not valid", stopping the rest of the function.
+  // an empty layer has no bounds and fitBounds throws
   if (features.length > 0) {
     map.fitBounds(layer.getBounds());
   }
@@ -97,7 +75,6 @@ function draw(features) {
   document.getElementById('count').textContent = features.length + ' districts';
 }
 
-// §8.3 - the legend ------------------------------------------------------
 const legend = L.control({ position: 'bottomright' });
 
 legend.onAdd = function () {
@@ -117,9 +94,7 @@ legend.onAdd = function () {
 
 legend.addTo(map);
 
-// §9.1 - build the drop-down from the data -------------------------------
-// Not typed by hand, so it stays correct if the data changes. The same map and
-// Set combination tried in the Console in §6.4.
+// build the drop-down from the data
 function fillProvinceList() {
   const select = document.getElementById('province');
   const provinces = [...new Set(
@@ -133,8 +108,6 @@ function fillProvinceList() {
   }
 }
 
-// §9.2 - react to the user ----------------------------------------------
-// Find an element, listen for an event, filter the data, redraw.
 document.getElementById('province')
   .addEventListener('change', function (event) {
     const chosen = event.target.value;
@@ -146,7 +119,6 @@ document.getElementById('province')
     draw(subset);
   });
 
-// §6.3 - fetch the file --------------------------------------------------
 async function loadData() {
   const response = await fetch('data/districts.geojson');
   if (!response.ok) {
