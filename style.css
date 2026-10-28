@@ -122,6 +122,32 @@ li:first-child { border-top: 1px solid var(--line); }
   color: var(--muted);
 }
 
+/* arrow after a lab title, so it reads as a link */
+.go-arrow {
+  display: inline-block;
+  margin-left: 3px;
+  font-size: 13px;
+  color: var(--muted);
+  transition: transform 120ms ease, color 120ms ease;
+}
+
+.t > a:hover .go-arrow {
+  transform: translateX(3px);
+  color: var(--ink);
+}
+
+/* one line under the list, saying what can be clicked */
+.hint {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.hint .k {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1px;
+}
+
 footer {
   margin-top: 56px;
   font-size: 12.5px;
