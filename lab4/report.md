@@ -285,6 +285,45 @@ right.
 Web Mercator is too large, and it gets worse further north. Gilgit is at 36
 degrees, where 1/cos²(36) is 1.53, so 53% is what the formula predicts.
 
+## Optional extras
+
+The four tasks at the end of the handout.
+
+**1. Province drop-down, filtering in the database**
+
+The menu is filled from the data. Choosing a province re-requests
+`/api/districts/?province=...`, so Sindh comes back as 29 rows instead of 160 and
+the other 131 never leave the server.
+
+![province menu](checkpoints/optional/1.png)
+
+**2. Facility model**
+
+A second model with a `PointField`, registered in the admin. Three facilities
+added by clicking on the admin map: a protected area, NUST and QAU.
+
+![facilities](checkpoints/optional/2.png)
+
+**3. Restricted user**
+
+An `editor` account with view and change permission on District, but not delete.
+Signed in, the admin shows only Districts, and the change form has Save but no
+Delete button. (The "Delete all Features" link under the geometry widget clears
+the shape from the form, not the row.)
+
+![admin as editor](checkpoints/optional/3a.png)
+
+![district form as editor](checkpoints/optional/3b.png)
+
+**4. Grey where there is no census figure**
+
+The style now looks at `pop_2023` before choosing a colour. A null gets grey
+`#c9cfd1` instead of a province colour, so Azad Kashmir, Gilgit Baltistan and
+Lehri read as "not recorded" rather than as low population. Hovering any of them
+confirms it with the tooltip and popup.
+
+![grey districts](checkpoints/optional/4.png)
+
 ## Questions
 
 ### 1. Every visitor used to download the whole GeoJSON file. What can a page backed by Django and PostGIS do instead? Two examples.

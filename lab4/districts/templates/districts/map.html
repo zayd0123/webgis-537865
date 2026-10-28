@@ -10,14 +10,26 @@
     header { padding: 16px 24px 12px; }
     h1 { margin: 0; font-size: 22px; }
     .subtitle { margin: 4px 0 0; color: #5b6a6e; }
-    #map { height: calc(100vh - 90px); min-height: 400px; }
+    #panel { padding: 10px 24px 12px; display: flex; align-items: center; gap: 12px; }
+    #province { padding: 4px 6px; }
+    #count { color: #5b6a6e; font-size: 14px; }
+    #map { height: calc(100vh - 140px); min-height: 400px; }
   </style>
 </head>
 <body>
   <header>
     <h1>Districts from PostGIS</h1>
-    <p class="subtitle"><span id="count">loading...</span>, served by Django from the database.</p>
+    <p class="subtitle">Served by Django from the database.</p>
   </header>
+
+  <div id="panel">
+    <label for="province">Province</label>
+    <select id="province">
+      <option value="">All provinces</option>
+    </select>
+    <span id="count">loading...</span>
+  </div>
+
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -46,24 +58,54 @@
       'Gilgit Baltistan': '#a6761d'
     };
 
+    const GREY = '#c9cfd1';
+
+    let layer = null;
+    let provincesFilled = false;
+
     function show(value) {
       return value === null || value === undefined ? 'not recorded' : value.toLocaleString();
     }
 
-    async function loadDistricts() {
-      const response = await fetch(DISTRICTS_URL);
+    function fillProvinceList(features) {
+      if (provincesFilled) return;
+      const select = document.getElementById('province');
+      const names = [...new Set(features.map(f => f.properties.province))].sort();
+      for (const name of names) {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      }
+      provincesFilled = true;
+    }
+
+    async function loadDistricts(province) {
+      const url = province
+        ? DISTRICTS_URL + '?province=' + encodeURIComponent(province)
+        : DISTRICTS_URL;
+
+      const response = await fetch(url);
       if (!response.ok) {
         console.error('Request failed with status ', response.status);
         return;
       }
       const data = await response.json();
 
-      const layer = L.geoJSON(data, {
+      fillProvinceList(data.features);
+
+      if (layer) {
+        map.removeLayer(layer);
+      }
+
+      layer = L.geoJSON(data, {
         style: function (feature) {
+          // districts with no census value are grey, not part of the colour scale
+          const pop = feature.properties.pop_2023;
           return {
             color: '#ffffff',
             weight: 1,
-            fillColor: colours[feature.properties.province] || '#888888',
+            fillColor: pop === null ? GREY : (colours[feature.properties.province] || '#888888'),
             fillOpacity: 0.7
           };
         },
@@ -73,11 +115,17 @@
         }
       }).addTo(map);
 
-      map.fitBounds(layer.getBounds());
+      if (data.features.length > 0) {
+        map.fitBounds(layer.getBounds());
+      }
       document.getElementById('count').textContent = data.features.length + ' districts';
     }
 
     loadDistricts();
+
+    document.getElementById('province').addEventListener('change', function (event) {
+      loadDistricts(event.target.value);
+    });
 
     // ask PostGIS which district contains the clicked point
     map.on('click', async function (e) {
