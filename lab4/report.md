@@ -99,19 +99,43 @@ That printed `bytes: 1006250`.
 
 ## Problems
 
-Part of this lab is installation, and on an ARM64 virtual machine a lot of it
-failed the first time. Each error is copied as it appeared.
+Part of this lab is installation. On an ARM64 virtual machine a lot of it failed
+the first time, so here is every error in the order it happened, copied as it
+appeared.
 
-**1. Python 3.15 was picked up first**
+**1. Activating the virtual environment**
 
 ```
-pip 26.2.2 from C:\Users\...\pythoncore-3.15-arm64\Lib\site-packages\pip (python 3.15)
+venv\Scripts\Activate.ps1 : The module 'venv' could not be loaded.
++ FullyQualifiedErrorId : CouldNotAutoLoadModule
 ```
 
-Django 6.1 does not support 3.15. Created the virtual environment from 3.14
-explicitly so the version outside it does not matter.
+PowerShell does not run scripts from the current folder without a `.\` prefix.
+Used `.\venv\Scripts\Activate.ps1` instead.
 
-**2. No psycopg binary for this machine**
+**2. The wrong Python was first on PATH**
+
+```
+pip 26.2.2 from C:\Users\zaidsstuff\AppData\Local\Python\pythoncore-3.15-arm64\Lib\site-packages\pip (python 3.15)
+```
+
+Django 6.1 does not support 3.15. The machine had 3.15, 3.14 and a third 3.14
+build. Created the virtual environment from 3.14 explicitly so that everything
+inside it is 3.14 whatever the machine default is.
+
+**3. pip refused to install outside the environment**
+
+```
+error: externally-managed-environment
+This Python installation is managed by uv and should not be modified.
+```
+
+This happened after dropping out of the virtual environment without noticing.
+`python` had gone back to the uv-managed 3.14. Fixed by always calling
+`.\venv\Scripts\python.exe` directly, which cannot pick up the wrong
+interpreter.
+
+**4. No psycopg binary for this machine**
 
 ```
 ERROR: ResolutionImpossible
@@ -122,7 +146,7 @@ for your environment: psycopg-binary
 There is no ARM64 Windows build of `psycopg-binary`. Installed plain `psycopg`
 instead, which is pure Python and uses the `libpq.dll` that PostgreSQL installs.
 
-**3. libpq not found**
+**5. libpq not found**
 
 ```
 ImportError: no pq wrapper available.
@@ -132,15 +156,15 @@ ImportError: no pq wrapper available.
 The DLL was on disk but its folder was not on PATH. Added
 `C:\Program Files\PostgreSQL\18\bin` to PATH.
 
-**4. Wrong architecture**
+**6. Wrong architecture**
 
 ```
 - couldn't import psycopg 'python' implementation: [WinError 193] %1 is not a
   valid Win32 application
 ```
 
-This was the real cause. The Python was an ARM64 build and `libpq.dll` is x64,
-so it could not be loaded at all. Checked with:
+This was the real cause of the last two. The Python was an ARM64 build and
+`libpq.dll` is x64, so it could not be loaded at all. Checked with:
 
 ```
 python -c "import sysconfig; print(sysconfig.get_platform())"
@@ -148,23 +172,23 @@ python -c "import sysconfig; print(sysconfig.get_platform())"
 
 which returned `win-arm64`. Note that `platform.machine()` is no help here. It
 reads `PROCESSOR_ARCHITECTURE`, which Windows sets to the machine's architecture,
-so it says ARM64 even for an x64 process.
+so it reports ARM64 even for an x64 process.
 
 Fixed by installing the x64 build of Python 3.14 from python.org and making the
-virtual environment from that. The same problem would have hit GDAL, since
-OSGeo4W is x64 as well.
+virtual environment from that. The same problem would have hit GDAL later, since
+OSGeo4W is x64 too.
 
-**5. Stack Builder stopped responding**
-
-It sat on "Review your selections" for about ten minutes, twice. The first time
-a download did start and finish. The second time it did not. Downloaded the
-bundle directly instead:
+**7. The database server was not running**
 
 ```
-https://download.osgeo.org/postgis/windows/pg18/postgis-bundle-pg18x64-setup-3.6.2-1.exe
+createdb: error: connection to server at "localhost" (::1), port 5432 failed:
+Connection refused (0x0000274D/10061)
 ```
 
-**6. Password rejected**
+The PostgreSQL service had not started after installation. Started it with
+`Start-Service postgresql-x64-18` from an administrator PowerShell.
+
+**8. Password rejected**
 
 ```
 FATAL: password authentication failed for user "postgres"
@@ -175,12 +199,36 @@ localhost lines in `pg_hba.conf` from `scram-sha-256` to `trust`, restarting the
 service, running `ALTER USER postgres WITH PASSWORD`, then setting the file back
 and restarting again.
 
-**7. OSGeo4W installer closed immediately**
+**9. Stack Builder stopped responding**
+
+It sat on "Review your selections" showing "Not Responding" for about ten
+minutes, twice. The first time a download did eventually start and finish. The
+second time it did not. Downloaded the bundle directly instead:
+
+```
+https://download.osgeo.org/postgis/windows/pg18/postgis-bundle-pg18x64-setup-3.6.2-1.exe
+```
+
+**10. OSGeo4W installer closed immediately**
 
 Running `osgeo4w-setup.exe` from the Mac share (`Z:`) closed it after a second.
-Copying it to the Windows disk first and running it from there worked.
+The copy at that path could not be started at all:
 
-**8. OpenStreetMap tiles blocked**
+```
+.\osgeo4w-setup.exe : The term '.\osgeo4w-setup.exe' is not recognized as the
+name of a cmdlet, function, script file, or operable program.
+```
+
+and once the drive mapping dropped:
+
+```
+Copy-Item : Cannot find drive. A drive with the name 'Z' does not exist.
+```
+
+Copying the file to the Windows disk first, using the `\\Mac\Home\...` path
+rather than the `Z:` letter, and running it from there worked.
+
+**11. OpenStreetMap tiles blocked**
 
 ```
 403 Access blocked. App is not following the tile usage policy of
@@ -190,7 +238,7 @@ OpenStreetMap's volunteer-run servers: osm.wiki/Blocked
 The districts drew fine, so only the basemap was affected. The same tile URL
 worked from the host machine, so the block was specific to this VM, probably
 because it goes out through a VPN. CARTO was tried next and now needs an API key,
-which showed up as `API KEY REQUIRED` watermarks on the tiles. The page was
+which showed up as `API KEY REQUIRED` watermarks across the map. The page was
 switched to OpenStreetMap France, which serves the same data from different
 servers:
 
@@ -203,7 +251,7 @@ The handout's own colour dictionary has trailing spaces in three province names
 match the values in the database, so three provinces would have been grey.
 Removed the spaces.
 
-**9. Brave blocked the developer tools**
+**12. Brave blocked the developer tools**
 
 ```
 DevTools not allowed on this page
@@ -211,9 +259,14 @@ Your organization has blocked the use of DevTools on this page
 ```
 
 A machine policy, `DeveloperToolsDisabled = 1` under
-`HKLM\SOFTWARE\Policies\BraveSoftware\Brave`. Removed the value and restarted the
-browser. The Network panel still would not render, so the response size was read
-in the Console as described under Checkpoint 7.
+`HKLM\SOFTWARE\Policies\BraveSoftware\Brave`. Removed the value and restarted
+the browser.
+
+**13. The Network panel still would not render**
+
+After the policy was removed the tab opened but stayed blank, with no toolbar and
+no request list. That is why the response size under Checkpoint 7 was measured in
+the Console instead of the Network tab.
 
 ## Area comparison
 

@@ -20,9 +20,13 @@ history is part of the record.
 | 01 | My First Web GIS | [`lab1/`](lab1/) | [open](https://zayd0123.github.io/webgis-537865/lab1/) | [`lab1/report.md`](lab1/report.md) |
 | 02 | District Explorer | [`lab2/`](lab2/) | [open](https://zayd0123.github.io/webgis-537865/lab2/) | [`lab2/report.md`](lab2/report.md) |
 | 03 | District Dashboard | [`lab3/`](lab3/) | [open](https://zayd0123.github.io/webgis-537865/lab3/) | [`lab3/report.md`](lab3/report.md) |
-| 04 | GeoDjango — Getting Started | `lab4/` | — | in progress |
+| 04 | GeoDjango — Getting Started | [`lab4/`](lab4/) | runs locally only | [`lab4/report.md`](lab4/report.md) |
 
 The root `index.html` is a landing page linking to each lab.
+
+Lab 4 has no live URL. It is a Django application and needs Python and a PostGIS
+database, which GitHub Pages cannot provide. To run it you need PostgreSQL with
+PostGIS, and the steps are in the report.
 
 ## Running any lab locally
 
@@ -51,6 +55,11 @@ screenshots.
 | 1 | `index.html` | none — OpenStreetMap tiles only |
 | 2 | `index.html`, `style.css`, `app.js` | `data/districts.geojson`, 160 districts |
 | 3 | `index.html`, `style.css`, `app.js` | `data/districts.geojson`, `data/district_points.geojson` |
+| 4 | Django project: `manage.py`, `webgis/`, `districts/` | `data/districts.geojson`, loaded into PostGIS |
+
+Lab 4 keeps its data in a database rather than a file, so `lab4/` also holds
+`requirements.txt` and the migration that creates the table. `venv/` is ignored
+and can be rebuilt with `pip install -r requirements.txt`.
 
 ## Earlier repositories
 
